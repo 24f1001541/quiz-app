@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Create Question - {{ quiz.name if quiz else "New Question" }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">
+                            <i class="fas fa-question-circle me-2"></i>
+                            New Question {% if quiz %}for {{ quiz.name }}{% endif %}
+                        </h3>
+                        {% if quiz and quiz.chapter and quiz.chapter.subject %}
+                        <span class="badge bg-light text-dark">
+                            {{ quiz.chapter.subject.name }} > {{ quiz.chapter.name }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% if quiz %}{{ url_for('main.admin_create_question', quiz_id=quiz.id) }}{% else %}#{% endif %}">
+                        <div class="mb-3">
+                            {{ form.question_statement.label(class="form-label") }}
+                            {{ form.question_statement(class="form-control" + (" is-invalid" if form.question_statement.errors else ""), rows=3, 
+                               placeholder="Enter the question text") }}
+                            {% if form.question_statement.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.question_statement.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                {{ form.option1.label(class="form-label") }}
+                                {{ form.option1(class="form-control" + (" is-invalid" if form.option1.errors else ""), 
+                                   placeholder="First option (required)") }}
+                                {% if form.option1.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.option1.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.option2.label(class="form-label") }}
+                                {{ form.option2(class="form-control" + (" is-invalid" if form.option2.errors else ""), 
+                                   placeholder="Second option (required)") }}
+                                {% if form.option2.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.option2.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.option3.label(class="form-label") }}
+                                {{ form.option3(class="form-control" + (" is-invalid" if form.option3.errors else ""), 
+                                   placeholder="Third option (optional)") }}
+                                {% if form.option3.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.option3.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.option4.label(class="form-label") }}
+                                {{ form.option4(class="form-control" + (" is-invalid" if form.option4.errors else ""), 
+                                   placeholder="Fourth option (optional)") }}
+                                {% if form.option4.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.option4.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.correct_option.label(class="form-label") }}
+                            {{ form.correct_option(class="form-select" + (" is-invalid" if form.correct_option.errors else "")) }}
+                            <small class="form-text text-muted">
+                                Select which option is the correct answer
+                            </small>
+                            {% if form.correct_option.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.correct_option.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end border-top pt-3">
+                            <a href="{% if quiz %}{{ url_for('main.admin_questions', quiz_id=quiz.id) }}{% else %}{{ url_for('main.admin_dashboard') }}{% endif %}" 
+                               class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary" {% if not quiz %}disabled{% endif %}>
+                                <i class="fas fa-save me-1"></i> Save Question
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

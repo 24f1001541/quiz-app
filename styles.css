@@ -1,0 +1,75 @@
+/* Progress Bar Enhancements */
+.progress {
+    height: 20px;
+    border-radius: 20px;
+    overflow: visible;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    position: relative;
+    overflow: visible;
+    font-weight: 500;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    transition: width 0.6s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: 0;
+    width: 1px;
+    height: calc(100% + 10px);
+    background: rgba(255,255,255,0.4);
+}
+
+/* Score Color Classes */
+.progress-bar.bg-success {
+    background-color: #28a745 !important;
+}
+
+.progress-bar.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529;
+}
+
+.progress-bar.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+/* Dashboard Cards */
+.analytics-card {
+    border-left: 4px solid;
+    transition: all 0.3s ease;
+}
+
+.analytics-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Responsive Tables */
+@media (max-width: 768px) {
+    .table-responsive-md {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table-responsive-md table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+    
+    .table-responsive-md td {
+        white-space: nowrap;
+    }
+}

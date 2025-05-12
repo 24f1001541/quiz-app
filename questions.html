@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Questions - {{ quiz.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-question-circle me-2"></i>Questions for {{ quiz.name }}
+        </h2>
+        <div>
+            <a href="{{ url_for('main.admin_quizzes', chapter_id=quiz.chapter_id) }}" 
+               class="btn btn-outline-secondary me-2">
+                <i class="fas fa-arrow-left me-1"></i> Back to Quizzes
+            </a>
+            <a href="{{ url_for('main.admin_create_question', quiz_id=quiz.id) }}" 
+               class="btn btn-success">
+                <i class="fas fa-plus me-1"></i> New Question
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-list-check me-2"></i>Question Bank
+            </h5>
+            <span class="badge bg-primary">
+                {{ questions|length }} question(s)
+            </span>
+        </div>
+        
+        <div class="card-body">
+            {% if questions %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="5%">ID</th>
+                            <th width="35%">Question</th>
+                            <th width="35%">Options</th>
+                            <th width="10%">Correct</th>
+                            <th width="15%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for question in questions %}
+                        <tr>
+                            <td>{{ question.id }}</td>
+                            <td>
+                                <div class="fw-semibold">{{ question.question_statement|truncate(50) }}</div>
+                                <small class="text-muted">
+                                    Created: 
+                                    {% if question.created_at %}
+                                        {{ question.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                    {% else %}
+                                        Date not available
+                                    {% endif %}
+                                </small>
+                            </td>
+                            <td>
+                                <ol class="mb-0 list-unstyled">
+                                    <li class="{% if question.correct_option == '1' %}text-success fw-bold{% endif %}">
+                                        {{ question.option1|truncate(20) }}
+                                    </li>
+                                    <li class="{% if question.correct_option == '2' %}text-success fw-bold{% endif %}">
+                                        {{ question.option2|truncate(20) }}
+                                    </li>
+                                    {% if question.option3 %}
+                                    <li class="{% if question.correct_option == '3' %}text-success fw-bold{% endif %}">
+                                        {{ question.option3|truncate(20) }}
+                                    </li>
+                                    {% endif %}
+                                    {% if question.option4 %}
+                                    <li class="{% if question.correct_option == '4' %}text-success fw-bold{% endif %}">
+                                        {{ question.option4|truncate(20) }}
+                                    </li>
+                                    {% endif %}
+                                </ol>
+                            </td>
+                            <td>
+                                <span class="badge bg-success">Option {{ question.correct_option }}</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{{ url_for('main.admin_edit_question', question_id=question.id) }}" 
+                                       class="btn btn-outline-primary" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ url_for('main.admin_delete_question', question_id=question.id) }}" method="POST">
+                                        <button type="submit" class="btn btn-outline-danger" 
+                                                title="Delete"
+                                                onclick="return confirm('Are you sure? This will permanently delete the question.')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-question-circle fa-4x text-muted mb-3"></i>
+                <h5>No Questions Found</h5>
+                <p class="text-muted">Get started by adding your first question</p>
+                <a href="{{ url_for('main.admin_create_question', quiz_id=quiz.id) }}" 
+                   class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-1"></i> Create Question
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        {% if questions %}
+        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    Showing {{ questions|length }} of {{ questions|length }} questions
+                </small>
+                <a href="{{ url_for('main.admin_create_question', quiz_id=quiz.id) }}" 
+                   class="btn btn-sm btn-success">
+                    <i class="fas fa-plus me-1"></i> Add Another
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
